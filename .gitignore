@@ -7,7 +7,6 @@ node_modules/
 
 # Firebase Credentials (IMPORTANT)
 serviceAccountKey.json
-*.json
 
 # Logs
 logs
