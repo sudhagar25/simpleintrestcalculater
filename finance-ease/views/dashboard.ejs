@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FinanceEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+            overflow: hidden;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-table th {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .history-table tr:hover {
+            background-color: #f1f7fd;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .delete-btn:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-wallet"></i> FinanceEase
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout (<%= user.username %>)</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <h2 style="color: var(--primary-color); margin-bottom: 20px;">Your Calculation History</h2>
+
+        <% if (history.length===0) { %>
+            <div class="card">
+                <p>No calculations found. Try using our calculators!</p>
+                <div style="margin-top: 15px;">
+                    <a href="/calculator/simple-interest" class="btn">Simple Interest</a>
+                    <a href="/calculator/emi" class="btn">EMI Calculator</a>
+                </div>
+            </div>
+            <% } else { %>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Input</th>
+                            <th>Result</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% history.forEach(item=> { %>
+                            <tr>
+                                <td>
+                                    <%= item.formatted_date %>
+                                </td>
+                                <td>
+                                    <%= item.type %>
+                                </td>
+                                <td>
+                                    <% for (const [key, value] of Object.entries(item.input_data)) { %>
+                                        <div><strong>
+                                                <%= key %>:
+                                            </strong>
+                                            <%= value %>
+                                        </div>
+                                        <% } %>
+                                </td>
+                                <td>
+                                    <% for (const [key, value] of Object.entries(item.result_data)) { %>
+                                        <div><strong>
+                                                <%= key %>:
+                                            </strong>
+                                            <%= value %>
+                                        </div>
+                                        <% } %>
+                                </td>
+                                <td>
+                                    <form action="/dashboard/delete/<%= item.id %>" method="POST"
+                                        onsubmit="return confirm('Are you sure?');">
+                                        <button type="submit" class="delete-btn" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 FinanceEase. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

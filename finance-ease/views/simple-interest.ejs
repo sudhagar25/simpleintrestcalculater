@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Interest Calculator - FinanceEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-wallet"></i> FinanceEase
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <% if (user) { %>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout (<%= user.username %>)</a>
+                <% } else { %>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                    <% } %>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <section class="hero-section">
+            <h1>Simple Interest Calculator</h1>
+            <p>Calculate your simple interest and total amount quickly.</p>
+        </section>
+
+        <!-- Calculator Card -->
+        <div class="card" style="max-width: 600px; margin: 0 auto; padding: 40px;">
+
+            <% if (error) { %>
+                <div
+                    style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form action="/calculator/simple-interest" method="POST">
+                        <div class="form-group">
+                            <label for="principal">Principal Amount (₹)</label>
+                            <input type="number" id="principal" name="principal" placeholder="Enter principal amount"
+                                required min="1" step="0.01"
+                                value="<%= input && input.principal ? input.principal : '' %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rate">Annual Interest Rate (%)</label>
+                            <input type="number" id="rate" name="rate" placeholder="Enter interest rate" required
+                                min="0" step="0.01" value="<%= input && input.rate ? input.rate : '' %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Time Period (Years)</label>
+                            <input type="number" id="time" name="time" placeholder="Enter time in years" required
+                                min="0" step="0.01" value="<%= input && input.time ? input.time : '' %>">
+                        </div>
+
+                        <button type="submit" class="btn"
+                            style="width: 100%; border: none; cursor: pointer;">Calculate</button>
+                    </form>
+
+                    <!-- Result Section -->
+                    <% if (result) { %>
+                        <div class="result-card" style="display: block;">
+                            <h3>Calculation Result</h3>
+                            <div class="result-item">
+                                <span>Principal Amount:</span>
+                                <span class="result-value">₹<%= result.principal %></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Total Interest:</span>
+                                <span class="result-value">₹<%= result.interest %></span>
+                            </div>
+                            <div class="result-item"
+                                style="margin-top: 15px; border-top: 1px solid #bee3f8; padding-top: 10px;">
+                                <span style="font-weight: bold; color: var(--text-color);">Total Amount:</span>
+                                <span class="result-value" style="font-size: 1.3rem;">₹<%= result.total %></span>
+                            </div>
+                            <% if (user) { %>
+                                <div style="margin-top: 10px; font-size: 0.9rem; color: #28a745;">
+                                    <i class="fas fa-check-circle"></i> Saved to Dashboard
+                                </div>
+                                <% } else { %>
+                                    <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                                        <a href="/login">Login</a> to save this calculation.
+                                    </div>
+                                    <% } %>
+                        </div>
+                        <% } %>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 FinanceEase. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

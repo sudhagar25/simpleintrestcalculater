@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+
+# Firebase Credentials (IMPORTANT)
+serviceAccountKey.json
+*.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+crash.log
+crash*.log
+firebase_test.log
+write_test.log
+diagnostic_result.txt
+
+# Editor Directories
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Temporary Scripts
+create_key.js
+fix_json.js
+test_firebase.js
+test_write.js
+test-db-connection.js
