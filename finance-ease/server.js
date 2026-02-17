@@ -70,9 +70,14 @@ app.use((err, req, res, next) => {
     `);
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`--------------------------------------------------`);
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-    console.log(`--------------------------------------------------`);
-});
+// Start Server (Only if not running on Vercel)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`--------------------------------------------------`);
+        console.log(`🚀 Server is running on http://localhost:${PORT}`);
+        console.log(`--------------------------------------------------`);
+    });
+}
+
+// Export the app for Vercel
+module.exports = app;

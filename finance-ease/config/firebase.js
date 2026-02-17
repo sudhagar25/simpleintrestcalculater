@@ -5,18 +5,30 @@ const fs = require('fs');
 const serviceAccountPath = path.join(__dirname, '../serviceAccountKey.json');
 
 try {
-    // Check if file exists first
-    if (!fs.existsSync(serviceAccountPath)) {
-        throw new Error('SERVICE_ACCOUNT_MISSING');
+    let serviceAccount;
+
+    // 1. Try to load from Environment Variable (for Vercel/Production)
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        try {
+            serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            console.log('✅ Loaded Firebase credentials from Environment Variable');
+        } catch (parseError) {
+            throw new Error('FIREBASE_ENV_PARSE_ERROR');
+        }
+    }
+    // 2. Fallback to local file (for Local Development)
+    else {
+        // Check if file exists first
+        if (!fs.existsSync(serviceAccountPath)) {
+            throw new Error('SERVICE_ACCOUNT_MISSING');
+        }
+        serviceAccount = require(serviceAccountPath);
+        console.log('✅ Loaded Firebase credentials from local file');
     }
 
-    const serviceAccount = require(serviceAccountPath);
-
-    // Check for placeholder data
-    if (serviceAccount.project_id === "PASTE_YOUR_PROJECT_ID_HERE" ||
-        serviceAccount.project_id === "simple-intrest-calculator" && serviceAccount.private_key_id === "038ac93f162adb13d1598768dc88279123ccf9fc") {
-        // The second condition checks for the specific placeholder key I fixed earlier which might still be invalid if not refreshed
-        // Actually, let's just check if it initializes.
+    // Check for placeholder data (Legacy check, keeping it just in case)
+    if (serviceAccount.project_id === "PASTE_YOUR_PROJECT_ID_HERE") {
+        console.warn("⚠️  Warning: Service Account appears to be a placeholder.");
     }
 
     admin.initializeApp({

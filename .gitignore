@@ -40,3 +40,4 @@ fix_json.js
 test_firebase.js
 test_write.js
 test-db-connection.js
+.vercel
